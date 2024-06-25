@@ -214,7 +214,7 @@ a.article-title:hover {
 
 .info-box {
     padding: 20px;
-    margin-top: 20px; 
+    margin-top: 60px; 
     background-color: #f8f9fa; 
-    border-radius: 5px;
+    border-radius: 20px;
 }
