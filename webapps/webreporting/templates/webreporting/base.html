@@ -27,13 +27,21 @@
                     <div class="navbar-nav mr-auto">
                         <a class="nav-item nav-link" href="{% url 'webreporting:home' %}">Home</a>
                         <a class="nav-item nav-link" href="#">Jobs</a>
-                        <a class="nav-item nav-link" href="% url 'webreporting:about' %}">About</a>
-                        <a class="nav-item nav-link" href="% url 'webreporting:contact' %}">Contact</a>
+                        <a class="nav-item nav-link" href="{% url 'webreporting:about' %}">About</a>
+                        <a class="nav-item nav-link" href="{% url 'webreporting:contact' %}">Contact</a>
                     </div>
                     <!-- Navbar Right Side -->
                     <div class="navbar-nav">
-                        <a class="nav-item nav-link" href="#">Login</a>
-                        <a class="nav-item nav-link" href="#">Register</a>
+                        {% if user.is_authencated %}
+                        <a class="nav-item nav-link" href="{% url 'webreporting:logout' %}">Logout</a>
+                        {% else %}
+                        <a class="nav-item nav-link" href="{% url 'webreporting:login' %}">Login</a>
+                        <a class="nav-item nav-link" href="{% url 'webreporting:register' %}">Register</a>
+                        {% endif %}
+                        {% if user.is_authenticated %}
+                            <a class="nav-item nav-link" href="#">Hello, {{ user.first_name }}</a>
+                        {% endif %}
+
                     </div>
                 </div>
                 </div>
@@ -41,7 +49,15 @@
         </header>
         <div class="row">
             <div class="col-md-8">
-            {% block content %}{% endblock %}
+            {% block content %}
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %} 
+            {% endblock %}
             </div>
             <div class="col-md-4">
                 <div class = "info-box"
