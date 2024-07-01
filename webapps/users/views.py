@@ -6,6 +6,7 @@ from .forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm
 
 
 
+
 # Create your views here.
 def register(request) :
     if request.method == 'POST' :
@@ -38,3 +39,4 @@ def profile(request):
    
     context = {'u_form': u_form, 'p_form': p_form, 'title': 'User Profile'}
     return render(request, 'users/profile.html', context)
+

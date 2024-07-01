@@ -1,0 +1,96 @@
+{% extends 'webreporting/base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="card">
+        <div class="card-header">
+            <h1 class="mb-0">Benefit Calculator</h1>
+        </div>
+        <div class="card-body">
+            <form method="post" novalidate>
+                {% csrf_token %}
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        {{ form.hours_worked.label_tag }}
+                        {{ form.hours_worked }}
+                        <div class="invalid-feedback">
+                            Please enter the number of hours you work per week.
+                        </div>
+                    </div>
+                    <div class="form-group col-md-6">
+                        {{ form.hourly_rate.label_tag }}
+                        {{ form.hourly_rate }}
+                        <div class="invalid-feedback">
+                            Please enter your hourly pay rate.
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        {{ form.get_housing_costs.label_tag }}
+                        <div class="form-check">
+                            {{ form.get_housing_costs }}
+                            <div class="invalid-feedback">
+                                Please select if you get help with housing costs.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-6">
+                        {{ form.has_work_allowance.label_tag }}
+                        <div class="form-check">
+                            {{ form.has_work_allowance }}
+                            <div class="invalid-feedback">
+                                Please select if you have a work allowance.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        {{ form.age.label_tag }}
+                        {{ form.age }}
+                        <div class="invalid-feedback">
+                            Please enter your age.
+                        </div>
+                    </div>
+                    <div class="form-group col-md-6">
+                        {{ form.partner_works_more_than_24_hours.label_tag }}
+                        <div class="form-check">
+                            {{ form.partner_works_more_than_24_hours }}
+                            <div class="invalid-feedback">
+                                Please select if your partner works more than 24 hours a week.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        {{ form.weeks_on_esa.label_tag }}
+                        {{ form.weeks_on_esa }}
+                        <div class="invalid-feedback">
+                            Please enter the number of weeks you have been on ESA.
+                        </div>
+                    </div>
+                    <div class="form-group col-md-6">
+                        {{ form.esa_group.label_tag }}
+                        {{ form.esa_group }}
+                        <div class="invalid-feedback">
+                            Please select your ESA group.
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        {{ form.num_children.label_tag }}
+                        {{ form.num_children }}
+                        <div class="invalid-feedback">
+                            Please enter the number of children you have.
+                        </div>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary">Calculate</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,70 @@
+{% extends 'webreporting/base.html' %}
+
+{% block content %}
+<div>
+    <br>
+    <br>
+    <br>
+    
+    <!-- Search Form Container -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h4>Search Jobs</h4>
+        </div>
+        <div class="card-body">
+            <form method="GET" action="{% url 'webreporting:job' %}">
+                <div class="form-group">
+                    <input type="text" name="search" class="form-control" placeholder="Search for jobs..." value="{{ search_query }}">
+                </div>
+                <div class="form-group">
+                    <select name="sort" class="form-control">
+                        <option value="">Sort By</option>
+                        <option value="title" {% if sort_option == 'title' %}selected{% endif %}>Title</option>
+                        <option value="company" {% if sort_option == 'company' %}selected{% endif %}>Company</option>
+                        <option value="posting_date" {% if sort_option == 'posting_date' %}selected{% endif %}>Posting Date</option>
+                        <option value="closing_date" {% if sort_option == 'closing_date' %}selected{% endif %}>Closing Date</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary">Search</button>
+            </form>
+        </div>
+    </div>
+
+    {% for job in jobs %}
+    <article class="media content-section">
+        <div class="media-body">
+            <div class="article-metadata">
+                <a class="mr-2" color="blue">{{ job.location }}</a>
+                <small class="text-muted">Posted by {{ job.company }}</small>
+                <small class="text-muted">| {{ job.job_type }}</small>
+            </div>
+            <h2><a class="article-title" href="{% url 'webreporting:job-detail' job.id %}">{{ job.title }}</a></h2>
+            {% if job.salary == 0 or job.salary|length > 0 and job.salary|add:"0" == 0 %}
+                <p class="article-content">{{ job.additional_salary_info }}</p>
+            {% else %}
+                <p class="article-content">{{ job.salary }}</p>
+            {% endif %}
+            <p class="text-muted">Posted on {{ job.posting_date }} | Applications close on {{ job.closing_date }}</p>
+        </div>
+    </article>
+    {% endfor %}
+    
+    {% if is_paginated %}
+        {% if page_obj.has_previous %}
+            <a class="btn btn-outline-info mb-4" href="?page=1">First</a>
+            <a class="btn btn-outline-info mb-4" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+        {% endif %}
+        {% for num in page_obj.paginator.page_range %}
+            {% if page_obj.number == num %}
+                <a class="btn btn-info mb-4" href="?page={{ num }}">{{ num }}</a>
+            {% elif num > page_obj.number|add:"-3" and num < page_obj.number|add:"3" %}
+                <a class="btn btn-outline-info mb-4" href="?page={{ num }}">{{ num }}</a>
+            {% endif %}
+        {% endfor %}
+        {% if page_obj.has_next %}
+            <a class="btn btn-outline-info mb-4" href="?page={{ page_obj.next_page_number }}">Next</a>
+            <a class="btn btn-outline-info mb-4" href="?page={{ page_obj.paginator.num_pages }}">Last</a>
+        {% endif %}
+    {% endif %}
+</div>
+{% endblock %}

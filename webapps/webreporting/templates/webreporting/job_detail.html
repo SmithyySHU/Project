@@ -1,0 +1,29 @@
+
+{% extends 'webreporting/base.html' %}
+
+{% block content %}
+
+
+<div>
+    <h1>Find Job Listings below: </h1>
+    
+   
+<h2 class="article-title">{{ object.title }}</h2>
+<div class="article-metadata">
+    <a class="mr-2" color="blue">{{ job.location }}</a>
+    <small class="text-muted">Posted by {{ job.company }}</small>
+    <small class="text-muted">| {{ job.job_type }}</small>
+</div>
+<div class="article-content">
+    {% if job.salary == 0 or job.salary|length > 0 and job.salary|add:"0" == 0 %}
+        <p class="article-content">{{ job.additional_salary_info }}</p>
+    {% else %}
+        <p class="article-content">{{ job.salary }}</p>
+    {% endif %}
+
+    <p class="article-content">{{ job.job_description }}</p>
+    <p class="text-muted">Posted on {{ job.posting_date }} | Applications close on {{ job.closing_date }}</p>
+</div>
+</div>
+
+{% endblock %}

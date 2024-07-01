@@ -1,4 +1,5 @@
 {% load static %}
+
 <link rel="stylesheet" type ="text/css" href="{% static 'css/style.css' %}" />
 <!DOCTYPE html>
 <html lang="en">
@@ -26,28 +27,29 @@
                 <div class="collapse navbar-collapse" id="navbarToggle">
                     <div class="navbar-nav mr-auto">
                         <a class="nav-item nav-link" href="{% url 'webreporting:home' %}">Home</a>
-                        <a class="nav-item nav-link" href="#">Jobs</a>
-                        <a class="nav-item nav-link" href="{% url 'webreporting:about' %}">About</a>
+                        <a class="nav-item nav-link" href="{% url 'webreporting:job' %}">Jobs</a>
+                        <a class="nav-item nav-link" href="{% url 'webreporting:benefit_calculator' %}">Benifit Calculator</a>
                         <a class="nav-item nav-link" href="{% url 'webreporting:contact' %}">Contact</a>
                     </div>
                     <!-- Navbar Right Side -->
                     <div class="navbar-nav">
                         {% if user.is_authenticated %}
                         <a class="nav-item nav-link" href="{% url 'webreporting:profile' %}">Profile</a>
-                        <a class="nav-item nav-link" href="{% url 'webreporting:logout' %}">Logout</a>
+                        <form id='logout' method ="post" action="{% url 'webreporting:logout' %}">
+                            {% csrf_token %}
+                           <a class="nav-item nav-link" href="#" onclick="document.getElementById('logout').submit()">Logout</a>
+                            </form>
                         {% else %}
                         <a class="nav-item nav-link" href="{% url 'webreporting:login' %}">Login</a>
                         <a class="nav-item nav-link" href="{% url 'webreporting:register' %}">Register</a>
                         {% endif %}
                         {% if user.is_authenticated %}
-                            <a class="nav-item nav-link" href="#">Hello, {{ user.first_name }}</a>
+                            <a class="nav-item nav-link" href="#">Hello, {{ user.first_name }} </a>
                         {% endif %}
-
                     </div>
-                    <
                 </div>
                 </div>
-            </nav>
+            </nav> 
         </header>
         <br>
         <br>
