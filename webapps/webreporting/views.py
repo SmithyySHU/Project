@@ -105,20 +105,39 @@ def calculate_working_tax_credit(hours_worked, num_children):
         yearly_credit += Decimal('122.50') * Decimal('52') * min(num_children, 1) + Decimal('210') * Decimal('52') * max(0, num_children - 1)
     return yearly_credit / Decimal('12')
 
+def calculate_take_home_pay(hours_worked, hourly_rate, benefits_lost, income_support_or_jsa, esa, working_tax_credit):
+    monthly_income_from_job = hours_worked * hourly_rate * Decimal('4.33')
+    total_benefits = income_support_or_jsa + esa + working_tax_credit
+    take_home_pay = monthly_income_from_job - benefits_lost + total_benefits
+    return take_home_pay
+
 def benefit_calculator(request):
     if request.method == 'POST':
         form = BenefitCalculatorForm(request.POST)
         if form.is_valid():
             cd = form.cleaned_data
-            benefits_lost_universal_credit = calculate_universal_credit(Decimal(cd['hours_worked']), Decimal(cd['hourly_rate']), cd['get_housing_costs'], cd['has_work_allowance'])
-            income_support_or_jsa = calculate_income_support_or_jsa(Decimal(cd['hours_worked']), cd['age'], cd['partner_works_more_than_24_hours'])
-            esa = calculate_esa(Decimal(cd['hours_worked']), cd['age'], cd['weeks_on_esa'], cd['esa_group'])
-            working_tax_credit = calculate_working_tax_credit(Decimal(cd['hours_worked']), cd['num_children'])
+            hours_worked = Decimal(cd['hours_worked'])
+            hourly_rate = Decimal(cd['hourly_rate'])
+            get_housing_costs = cd['get_housing_costs']
+            has_work_allowance = cd['has_work_allowance']
+            age = cd['age']
+            partner_works_more_than_24_hours = cd['partner_works_more_than_24_hours']
+            weeks_on_esa = cd['weeks_on_esa'] if cd['weeks_on_esa'] is not None else Decimal('0')
+            esa_group = cd['esa_group']
+            num_children = cd['num_children'] if cd['num_children'] is not None else Decimal('0')
+
+            benefits_lost_universal_credit = calculate_universal_credit(hours_worked, hourly_rate, get_housing_costs, has_work_allowance)
+            income_support_or_jsa = calculate_income_support_or_jsa(hours_worked, age, partner_works_more_than_24_hours)
+            esa = calculate_esa(hours_worked, age, weeks_on_esa, esa_group)
+            working_tax_credit = calculate_working_tax_credit(hours_worked, num_children)
+            take_home_pay = calculate_take_home_pay(hours_worked, hourly_rate, benefits_lost_universal_credit, income_support_or_jsa, esa, working_tax_credit)
+
             return render(request, 'webreporting/result.html', {
                 'benefits_lost_universal_credit': benefits_lost_universal_credit,
                 'income_support_or_jsa': income_support_or_jsa,
                 'esa': esa,
-                'working_tax_credit': working_tax_credit
+                'working_tax_credit': working_tax_credit,
+                'take_home_pay': take_home_pay
             })
     else:
         form = BenefitCalculatorForm()

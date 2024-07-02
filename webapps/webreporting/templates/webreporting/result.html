@@ -2,15 +2,18 @@
 
 {% block content %}
 <div class="container mt-5">
-    <h1 class="mb-4">Benefit Calculation Result</h1>
     <div class="card">
+        <div class="card-header">
+            <h1 class="mb-0">Benefit Calculation Result</h1>
+        </div>
         <div class="card-body">
-            <p>Universal Credit reduction per month: £{{ benefits_lost_universal_credit }}</p>
-            <p>Income Support or Jobseeker's Allowance per week: £{{ income_support_or_jsa }}</p>
-            <p>Employment and Support Allowance per week: £{{ esa }}</p>
-            <p>Working Tax Credit per month: £{{ working_tax_credit }}</p>
+            <p>Universal Credit reduction per month: £{{ benefits_lost_universal_credit|floatformat:2 }}</p>
+            <p>Income Support or Jobseeker's Allowance per week: £{{ income_support_or_jsa|floatformat:2 }}</p>
+            <p>Employment and Support Allowance per week: £{{ esa|floatformat:2 }}</p>
+            <p>Working Tax Credit per month: £{{ working_tax_credit|floatformat:2 }}</p>
+            <p><strong>Estimated Take-Home Pay per month: £{{ take_home_pay|floatformat:2 }}</strong></p>
+            <a href="{% url 'webreporting:benefit_calculator' %}" class="btn btn-primary mt-3">Back to Calculator</a>
         </div>
     </div>
-    <a href="{% url 'webreporting:benefit_calculator' %}" class="btn btn-primary mt-3">Back to Calculator</a>
 </div>
 {% endblock %}
