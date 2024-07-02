@@ -107,7 +107,9 @@ def calculate_working_tax_credit(hours_worked, num_children):
 
 def calculate_take_home_pay(hours_worked, hourly_rate, benefits_lost, income_support_or_jsa, esa, working_tax_credit):
     monthly_income_from_job = hours_worked * hourly_rate * Decimal('4.33')
-    total_benefits = income_support_or_jsa + esa + working_tax_credit
+    monthly_income_support_or_jsa = income_support_or_jsa * Decimal('4.33')
+    monthly_esa = esa * Decimal('4.33')
+    total_benefits = monthly_income_support_or_jsa + monthly_esa + working_tax_credit
     take_home_pay = monthly_income_from_job - benefits_lost + total_benefits
     return take_home_pay
 
